@@ -19,3 +19,21 @@ describe("Given I am connected as an employee", () => {
     })
   })
 })
+
+describe("Given an employee enter his email and his password", () => {
+  describe("When the inputs are wrong", () => {
+    test("Then error page appear", () => {
+      const html = BillsUI({ error: 'some error message' })
+      document.body.innerHTML = html
+      expect(screen.getAllByText('Erreur')).toBeTruthy()
+      expect(screen.getAllByText('some error message')).toBeTruthy()
+    })
+  })
+  describe("When the inputs are good", () => {
+    test("Then loading page appear", () => {
+      const html = BillsUI({ loading: true })
+      document.body.innerHTML = html
+      expect(screen.getAllByText('Loading...')).toBeTruthy()
+    })
+  })
+})
