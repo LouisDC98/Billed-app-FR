@@ -31,9 +31,8 @@ export default class NewBill {
           this.fileName = fileName
         })
     } else {
-        document.querySelector(`input[data-testid="file"]`).value = "";
-        alert('Désolé, ' + file.name + ' est invalide, extensions autorisées jpeg/jpg/png')
-      }
+      this.document.querySelector(`input[data-testid="file"]`).value = "";
+    }
   }
   handleSubmit = e => {
     e.preventDefault()
