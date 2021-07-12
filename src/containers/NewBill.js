@@ -16,22 +16,30 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
+    const input = this.document.querySelector(`input[data-testid="file"]`)
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
+    const fileName = file.name
     const fileExtension = fileName.split('.').pop();
-    if(['PNG', 'JPG', 'JPEG'].includes(fileExtension.toUpperCase())) { 
-      this.firestore
-        .storage
-        .ref(`justificatifs/${fileName}`)
-        .put(file)
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(url => {
-          this.fileUrl = url
-          this.fileName = fileName
-        })
+    if (['PNG', 'JPG', 'JPEG'].includes(fileExtension.toUpperCase())) {
+      if (input.classList.contains('red-border')) {
+        input.classList.remove('red-border')
+      }
+      if (this.firestore) {
+        this.firestore
+          .storage
+          .ref(`justificatifs/${fileName}`)
+          .put(file)
+          .then(snapshot => snapshot.ref.getDownloadURL())
+          .then(url => {
+            this.fileUrl = url
+            this.fileName = fileName
+          })
+      }
     } else {
-      this.document.querySelector(`input[data-testid="file"]`).value = "";
+      input.value = "";
+      if (!input.classList.contains('red-border')) {
+        input.classList.add('red-border')
+      }
     }
   }
   handleSubmit = e => {
