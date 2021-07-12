@@ -1,6 +1,8 @@
-import { screen } from "@testing-library/dom"
+import { fireEvent, screen } from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
+import Bills from "../containers/Bills.js"
+import { ROUTES } from "../constants/routes.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -34,6 +36,33 @@ describe("Given an employee enter his email and his password", () => {
       const html = BillsUI({ loading: true })
       document.body.innerHTML = html
       expect(screen.getAllByText('Loading...')).toBeTruthy()
+    })
+  })
+})
+
+describe("Given I am connected as an employee", () => {
+  describe("When I click on button 'Nouvelle note de frais'", () => {
+    test("Then the page new bill appear", () => {
+      document.body.innerHTML = BillsUI(bills);
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+
+      const bill = new Bills({
+        document,
+        onNavigate,
+        firestore: null,
+        localStorage: window.localStorage
+      })
+
+      const btnNewBill = screen.getByTestId('btn-new-bill');
+      const mockFunction = jest.fn(bill.handleClickNewBill)
+
+      btnNewBill.addEventListener('click', mockFunction)
+      fireEvent.click(btnNewBill)
+
+      expect(mockFunction).toHaveBeenCalled()
     })
   })
 })
