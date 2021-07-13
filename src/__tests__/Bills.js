@@ -67,6 +67,38 @@ describe("Given I am connected as an employee", () => {
     })
   })
 })
+
+describe("Given I am connected as an employee", () => {
+  describe("When I click on the eye icon", () => {
+    test("Then a modal should appear", () => {
+
+      const html = BillsUI({ data: bills });
+      document.body.innerHTML = html;
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+
+      const classBills = new Bills({
+        document,
+        onNavigate,
+        firestore: null,
+        localStorage: window.localStorage,
+      });
+
+      const iconEye = screen.getAllByTestId("icon-eye")[0];
+      const modal = document.getElementById("modaleFile");
+
+      const mockFunction = jest.fn(classBills.handleClickIconEye(iconEye))
+      iconEye.addEventListener("click", mockFunction);
+      fireEvent.click(iconEye);
+
+      expect(mockFunction).toHaveBeenCalled();
+      expect(modal).toBeTruthy();
+    })
+  })
+})
+
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills page", () => {
     test("fetches bills from mock API GET", async () => {
