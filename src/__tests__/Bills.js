@@ -44,7 +44,7 @@ describe("Given an employee enter his email and his password", () => {
 describe("Given I am connected as an employee", () => {
   describe("When I click on button 'Nouvelle note de frais'", () => {
     test("Then the page new bill appear", () => {
-      document.body.innerHTML = BillsUI(bills);
+      document.body.innerHTML = BillsUI({data : bills});
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -88,6 +88,8 @@ describe("Given I am connected as an employee", () => {
 
       const iconEye = screen.getAllByTestId("icon-eye")[0];
       const modal = document.getElementById("modaleFile");
+
+      $.fn.modal = jest.fn()
 
       const mockFunction = jest.fn(classBills.handleClickIconEye(iconEye))
       iconEye.addEventListener("click", mockFunction);
